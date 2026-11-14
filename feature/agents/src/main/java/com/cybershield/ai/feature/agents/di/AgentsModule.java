@@ -7,6 +7,7 @@ import com.cybershield.ai.core.ai.TFLiteEngine;
 import com.cybershield.ai.core.ai.TensorUtils;
 import com.cybershield.ai.core.common.utils.AppExecutors;
 import com.cybershield.ai.core.security.DataRedactor;
+import com.cybershield.ai.feature.agents.app_security.AppSecurityAgent;
 import com.cybershield.ai.feature.agents.call_intelligence.CallIntelligenceAgent;
 import com.cybershield.ai.feature.agents.malware.MalwareAnomalyAgent;
 import com.cybershield.ai.feature.agents.network_guard.NetworkGuardAgent;
@@ -79,7 +80,13 @@ public final class AgentsModule {
 
     @Provides
     @Singleton
-    public static AdaptiveAgentOrchestrator provideAdaptiveAgentOrchestrator(SystemResourceMonitor resourceMonitor, PhishingDetectorAgent phishingAgent, MalwareAnomalyAgent malwareAgent, NetworkGuardAgent networkAgent, CallIntelligenceAgent callAgent, PaymentProtectionAgent paymentAgent, SmsSecurityAgent smsAgent) {
-        return new AdaptiveAgentOrchestrator(resourceMonitor, phishingAgent, malwareAgent, networkAgent, callAgent, paymentAgent, smsAgent);
+    public static AppSecurityAgent provideAppSecurityAgent(@ApplicationContext Context context, AppExecutors appExecutors, TFLiteEngine tfLiteEngine, FeatureVectorizer featureVectorizer, TensorUtils tensorUtils, DataRedactor dataRedactor) {
+        return new AppSecurityAgent(context, appExecutors, tfLiteEngine, featureVectorizer, tensorUtils, dataRedactor);
+    }
+
+    @Provides
+    @Singleton
+    public static AdaptiveAgentOrchestrator provideAdaptiveAgentOrchestrator(SystemResourceMonitor resourceMonitor, PhishingDetectorAgent phishingAgent, MalwareAnomalyAgent malwareAgent, NetworkGuardAgent networkAgent, CallIntelligenceAgent callAgent, PaymentProtectionAgent paymentAgent, SmsSecurityAgent smsAgent, AppSecurityAgent appAgent) {
+        return new AdaptiveAgentOrchestrator(resourceMonitor, phishingAgent, malwareAgent, networkAgent, callAgent, paymentAgent, smsAgent, appAgent);
     }
 }

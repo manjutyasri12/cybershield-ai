@@ -180,4 +180,51 @@ public class FeatureVectorizer {
 
         return features;
     }
+
+    @NonNull
+    public float[] vectorizeAppPermissions(
+            @NonNull String packageName,
+            boolean hasAccessibility,
+            boolean hasOverlay,
+            boolean isSideloaded,
+            boolean isFakeBankingPattern,
+            boolean hasSmsPermission,
+            boolean hasBackgroundService
+    ) {
+        float[] features = new float[10];
+        if (packageName == null) packageName = "";
+
+        // Feature 0: BIND_ACCESSIBILITY_SERVICE Abuse
+        features[0] = hasAccessibility ? 1.0f : 0.0f;
+
+        // Feature 1: SYSTEM_ALERT_WINDOW / Overlay Abuse
+        features[1] = hasOverlay ? 1.0f : 0.0f;
+
+        // Feature 2: Sideloaded / Unknown APK origin
+        features[2] = isSideloaded ? 1.0f : 0.0f;
+
+        // Feature 3: Fake Banking App pattern
+        features[3] = isFakeBankingPattern ? 1.0f : 0.0f;
+
+        // Feature 4: High Risk Combo (Accessibility + Overlay)
+        features[4] = (hasAccessibility && hasOverlay) ? 1.0f : 0.0f;
+
+        // Feature 5: SMS Interception Combo (SMS + Overlay)
+        features[5] = (hasSmsPermission && hasOverlay) ? 1.0f : 0.0f;
+
+        // Feature 6: Persistent Background Service
+        features[6] = hasBackgroundService ? 1.0f : 0.0f;
+
+        // Feature 7: Suspicious package domain structure
+        String lowerPkg = packageName.toLowerCase();
+        features[7] = (lowerPkg.contains("bank") || lowerPkg.contains("wallet") || lowerPkg.contains("pay")) && !lowerPkg.startsWith("com.") ? 0.9f : 0.0f;
+
+        // Feature 8: Random / Obfuscated package name length
+        features[8] = lowerPkg.matches(".*[0-9a-f]{8,}.*") ? 0.8f : 0.0f;
+
+        // Feature 9: Total Risk Weight
+        features[9] = Math.min((features[0] + features[1] + features[3]) / 3.0f, 1.0f);
+
+        return features;
+    }
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.cybershield.ai.core.common.constants.AppConstants;
+import com.cybershield.ai.feature.agents.app_security.AppSecurityAgent;
 import com.cybershield.ai.feature.agents.base.AgentState;
 import com.cybershield.ai.feature.agents.base.BaseAgent;
 import com.cybershield.ai.feature.agents.call_intelligence.CallIntelligenceAgent;
@@ -45,6 +46,7 @@ public class AdaptiveAgentOrchestrator {
     private final CallIntelligenceAgent callAgent;
     private final PaymentProtectionAgent paymentAgent;
     private final SmsSecurityAgent smsAgent;
+    private final AppSecurityAgent appAgent;
 
     private final List<OrchestrationObserver> observers = new CopyOnWriteArrayList<>();
     private final MutableLiveData<String> activeStrategyName = new MutableLiveData<>("BALANCED");
@@ -60,7 +62,8 @@ public class AdaptiveAgentOrchestrator {
             NetworkGuardAgent networkAgent,
             CallIntelligenceAgent callAgent,
             PaymentProtectionAgent paymentAgent,
-            SmsSecurityAgent smsAgent
+            SmsSecurityAgent smsAgent,
+            AppSecurityAgent appAgent
     ) {
         this.resourceMonitor = resourceMonitor;
         this.phishingAgent = phishingAgent;
@@ -69,6 +72,7 @@ public class AdaptiveAgentOrchestrator {
         this.callAgent = callAgent;
         this.paymentAgent = paymentAgent;
         this.smsAgent = smsAgent;
+        this.appAgent = appAgent;
         this.currentStrategy = new BalancedStrategy();
     }
 
@@ -96,6 +100,7 @@ public class AdaptiveAgentOrchestrator {
         dispatchAgentAction(callAgent, metrics);
         dispatchAgentAction(paymentAgent, metrics);
         dispatchAgentAction(smsAgent, metrics);
+        dispatchAgentAction(appAgent, metrics);
     }
 
     private void selectStrategy(SystemMetrics metrics) {
@@ -151,4 +156,5 @@ public class AdaptiveAgentOrchestrator {
     public CallIntelligenceAgent getCallAgent() { return callAgent; }
     public PaymentProtectionAgent getPaymentAgent() { return paymentAgent; }
     public SmsSecurityAgent getSmsAgent() { return smsAgent; }
+    public AppSecurityAgent getAppAgent() { return appAgent; }
 }
