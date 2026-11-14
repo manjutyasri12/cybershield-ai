@@ -19,6 +19,7 @@ import com.cybershield.ai.feature.agents.orchestrator.strategy.BatterySaverStrat
 import com.cybershield.ai.feature.agents.orchestrator.strategy.EmergencyThrottleStrategy;
 import com.cybershield.ai.feature.agents.orchestrator.strategy.OrchestrationStrategy;
 import com.cybershield.ai.feature.agents.orchestrator.strategy.PerformanceStrategy;
+import com.cybershield.ai.feature.agents.payment_protection.PaymentProtectionAgent;
 import com.cybershield.ai.feature.agents.phishing.PhishingDetectorAgent;
 
 import java.util.List;
@@ -41,6 +42,7 @@ public class AdaptiveAgentOrchestrator {
     private final MalwareAnomalyAgent malwareAgent;
     private final NetworkGuardAgent networkAgent;
     private final CallIntelligenceAgent callAgent;
+    private final PaymentProtectionAgent paymentAgent;
 
     private final List<OrchestrationObserver> observers = new CopyOnWriteArrayList<>();
     private final MutableLiveData<String> activeStrategyName = new MutableLiveData<>("BALANCED");
@@ -54,13 +56,15 @@ public class AdaptiveAgentOrchestrator {
             PhishingDetectorAgent phishingAgent,
             MalwareAnomalyAgent malwareAgent,
             NetworkGuardAgent networkAgent,
-            CallIntelligenceAgent callAgent
+            CallIntelligenceAgent callAgent,
+            PaymentProtectionAgent paymentAgent
     ) {
         this.resourceMonitor = resourceMonitor;
         this.phishingAgent = phishingAgent;
         this.malwareAgent = malwareAgent;
         this.networkAgent = networkAgent;
         this.callAgent = callAgent;
+        this.paymentAgent = paymentAgent;
         this.currentStrategy = new BalancedStrategy();
     }
 
@@ -86,6 +90,7 @@ public class AdaptiveAgentOrchestrator {
         dispatchAgentAction(malwareAgent, metrics);
         dispatchAgentAction(networkAgent, metrics);
         dispatchAgentAction(callAgent, metrics);
+        dispatchAgentAction(paymentAgent, metrics);
     }
 
     private void selectStrategy(SystemMetrics metrics) {
@@ -139,4 +144,5 @@ public class AdaptiveAgentOrchestrator {
     public MalwareAnomalyAgent getMalwareAgent() { return malwareAgent; }
     public NetworkGuardAgent getNetworkAgent() { return networkAgent; }
     public CallIntelligenceAgent getCallAgent() { return callAgent; }
+    public PaymentProtectionAgent getPaymentAgent() { return paymentAgent; }
 }

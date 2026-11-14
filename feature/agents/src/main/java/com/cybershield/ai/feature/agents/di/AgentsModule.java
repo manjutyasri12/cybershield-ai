@@ -13,6 +13,7 @@ import com.cybershield.ai.feature.agents.network_guard.NetworkGuardAgent;
 import com.cybershield.ai.feature.agents.orchestrator.AdaptiveAgentOrchestrator;
 import com.cybershield.ai.feature.agents.orchestrator.BatteryPowerMonitor;
 import com.cybershield.ai.feature.agents.orchestrator.monitor.SystemResourceMonitor;
+import com.cybershield.ai.feature.agents.payment_protection.PaymentProtectionAgent;
 import com.cybershield.ai.feature.agents.phishing.PhishingDetectorAgent;
 
 import javax.inject.Singleton;
@@ -65,7 +66,13 @@ public final class AgentsModule {
 
     @Provides
     @Singleton
-    public static AdaptiveAgentOrchestrator provideAdaptiveAgentOrchestrator(SystemResourceMonitor resourceMonitor, PhishingDetectorAgent phishingAgent, MalwareAnomalyAgent malwareAgent, NetworkGuardAgent networkAgent, CallIntelligenceAgent callAgent) {
-        return new AdaptiveAgentOrchestrator(resourceMonitor, phishingAgent, malwareAgent, networkAgent, callAgent);
+    public static PaymentProtectionAgent providePaymentProtectionAgent(AppExecutors appExecutors, TFLiteEngine tfLiteEngine, FeatureVectorizer featureVectorizer, TensorUtils tensorUtils, DataRedactor dataRedactor) {
+        return new PaymentProtectionAgent(appExecutors, tfLiteEngine, featureVectorizer, tensorUtils, dataRedactor);
+    }
+
+    @Provides
+    @Singleton
+    public static AdaptiveAgentOrchestrator provideAdaptiveAgentOrchestrator(SystemResourceMonitor resourceMonitor, PhishingDetectorAgent phishingAgent, MalwareAnomalyAgent malwareAgent, NetworkGuardAgent networkAgent, CallIntelligenceAgent callAgent, PaymentProtectionAgent paymentAgent) {
+        return new AdaptiveAgentOrchestrator(resourceMonitor, phishingAgent, malwareAgent, networkAgent, callAgent, paymentAgent);
     }
 }

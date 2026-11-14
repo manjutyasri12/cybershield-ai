@@ -100,4 +100,37 @@ public class FeatureVectorizer {
 
         return features;
     }
+
+    @NonNull
+    public float[] vectorizePaymentSignals(@NonNull String upiUri, double amount, boolean isNewBeneficiary, int failedAttemptsCount) {
+        float[] features = new float[10];
+        if (upiUri == null) upiUri = "";
+        String lowerUri = upiUri.toLowerCase();
+
+        // Feature 0: Valid UPI scheme (upi://pay)
+        features[0] = lowerUri.startsWith("upi://pay") ? 1.0f : 0.0f;
+
+        // Feature 1: High Transaction Amount normalized (Threshold e.g. >10,000 INR)
+        features[1] = Math.min((float) (amount / 20000.0), 1.0f);
+
+        // Feature 2: Is New Beneficiary
+        features[2] = isNewBeneficiary ? 1.0f : 0.0f;
+
+        // Feature 3: Failed Payment attempts frequency
+        features[3] = Math.min(failedAttemptsCount / 5.0f, 1.0f);
+
+        // Features 4-7: Fraudulent keywords in VPA or note (e.g. "cashback", "refund", "lottery", "support", "reward")
+        features[4] = (lowerUri.contains("cashback") || lowerUri.contains("reward")) ? 1.0f : 0.0f;
+        features[5] = (lowerUri.contains("refund") || lowerUri.contains("support")) ? 1.0f : 0.0f;
+        features[6] = (lowerUri.contains("claim") || lowerUri.contains("offer")) ? 1.0f : 0.0f;
+        features[7] = (lowerUri.contains("pin") || lowerUri.contains("verify")) ? 1.0f : 0.0f;
+
+        // Feature 8: Malformed VPA format
+        features[8] = (lowerUri.contains("pa=") && !lowerUri.contains("@")) ? 1.0f : 0.0f;
+
+        // Feature 9: Spoofed domain extension in VPA
+        features[9] = (lowerUri.contains("@ybl") || lowerUri.contains("@paytm") || lowerUri.contains("@okaxis") || lowerUri.contains("@upi")) ? 0.0f : 0.8f;
+
+        return features;
+    }
 }
