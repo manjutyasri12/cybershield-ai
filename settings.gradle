@@ -1,0 +1,25 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "CyberShield AI"
+include ':app'
+include ':core:common'
+include ':core:database'
+include ':core:network'
+include ':core:security'
+include ':core:ai'
+include ':feature:agents'
+include ':feature:auth'
+include ':feature:dashboard'
