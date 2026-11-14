@@ -67,4 +67,37 @@ public class FeatureVectorizer {
         }
         return list;
     }
+
+    @NonNull
+    public float[] vectorizeCallSignals(@NonNull String phoneNumber, int callFrequencyLastHour, @NonNull String transcriptSnippet) {
+        float[] features = new float[10];
+        if (phoneNumber == null) phoneNumber = "";
+        if (transcriptSnippet == null) transcriptSnippet = "";
+
+        // Feature 0: Unknown / Short code number format
+        boolean isShortCode = phoneNumber.length() < 7;
+        features[0] = isShortCode ? 1.0f : 0.0f;
+
+        // Feature 1: High Call Frequency ratio (Robocall flood indicator)
+        features[1] = Math.min(callFrequencyLastHour / 10.0f, 1.0f);
+
+        // Feature 2: Contains international prefix without contact association
+        features[2] = (phoneNumber.startsWith("+") && !phoneNumber.startsWith("+1")) ? 0.8f : 0.0f;
+
+        // Features 3-7: Voice Scam pattern keyword indicators in transcriptSnippet
+        String lowerSnippet = transcriptSnippet.toLowerCase();
+        features[3] = (lowerSnippet.contains("bank") || lowerSnippet.contains("verify") || lowerSnippet.contains("account")) ? 1.0f : 0.0f;
+        features[4] = (lowerSnippet.contains("urgent") || lowerSnippet.contains("immediate") || lowerSnippet.contains("lawsuit")) ? 1.0f : 0.0f;
+        features[5] = (lowerSnippet.contains("gift card") || lowerSnippet.contains("crypto") || lowerSnippet.contains("wire transfer")) ? 1.0f : 0.0f;
+        features[6] = (lowerSnippet.contains("irs") || lowerSnippet.contains("tax") || lowerSnippet.contains("social security")) ? 1.0f : 0.0f;
+        features[7] = (lowerSnippet.contains("winner") || lowerSnippet.contains("lottery") || lowerSnippet.contains("prize")) ? 1.0f : 0.0f;
+
+        // Feature 8: Suspicious Area Code pattern
+        features[8] = (phoneNumber.contains("876") || phoneNumber.contains("809") || phoneNumber.contains("284")) ? 1.0f : 0.0f;
+
+        // Feature 9: Digit entropy / repeating numbers
+        features[9] = phoneNumber.matches(".*(\\d)\\1{4,}.*") ? 0.9f : 0.1f;
+
+        return features;
+    }
 }

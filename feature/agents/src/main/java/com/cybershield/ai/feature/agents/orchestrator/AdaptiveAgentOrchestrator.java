@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.cybershield.ai.core.common.constants.AppConstants;
 import com.cybershield.ai.feature.agents.base.AgentState;
 import com.cybershield.ai.feature.agents.base.BaseAgent;
+import com.cybershield.ai.feature.agents.call_intelligence.CallIntelligenceAgent;
 import com.cybershield.ai.feature.agents.malware.MalwareAnomalyAgent;
 import com.cybershield.ai.feature.agents.network_guard.NetworkGuardAgent;
 import com.cybershield.ai.feature.agents.orchestrator.model.AgentAction;
@@ -39,6 +40,7 @@ public class AdaptiveAgentOrchestrator {
     private final PhishingDetectorAgent phishingAgent;
     private final MalwareAnomalyAgent malwareAgent;
     private final NetworkGuardAgent networkAgent;
+    private final CallIntelligenceAgent callAgent;
 
     private final List<OrchestrationObserver> observers = new CopyOnWriteArrayList<>();
     private final MutableLiveData<String> activeStrategyName = new MutableLiveData<>("BALANCED");
@@ -51,12 +53,14 @@ public class AdaptiveAgentOrchestrator {
             SystemResourceMonitor resourceMonitor,
             PhishingDetectorAgent phishingAgent,
             MalwareAnomalyAgent malwareAgent,
-            NetworkGuardAgent networkAgent
+            NetworkGuardAgent networkAgent,
+            CallIntelligenceAgent callAgent
     ) {
         this.resourceMonitor = resourceMonitor;
         this.phishingAgent = phishingAgent;
         this.malwareAgent = malwareAgent;
         this.networkAgent = networkAgent;
+        this.callAgent = callAgent;
         this.currentStrategy = new BalancedStrategy();
     }
 
@@ -81,6 +85,7 @@ public class AdaptiveAgentOrchestrator {
         dispatchAgentAction(phishingAgent, metrics);
         dispatchAgentAction(malwareAgent, metrics);
         dispatchAgentAction(networkAgent, metrics);
+        dispatchAgentAction(callAgent, metrics);
     }
 
     private void selectStrategy(SystemMetrics metrics) {
@@ -133,4 +138,5 @@ public class AdaptiveAgentOrchestrator {
     public PhishingDetectorAgent getPhishingAgent() { return phishingAgent; }
     public MalwareAnomalyAgent getMalwareAgent() { return malwareAgent; }
     public NetworkGuardAgent getNetworkAgent() { return networkAgent; }
+    public CallIntelligenceAgent getCallAgent() { return callAgent; }
 }

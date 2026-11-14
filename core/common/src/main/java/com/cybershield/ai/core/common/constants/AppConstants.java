@@ -26,6 +26,7 @@ public final class AppConstants {
     public static final String AGENT_PHISHING = "AGENT_PHISHING_DETECTOR";
     public static final String AGENT_MALWARE = "AGENT_MALWARE_ANOMALY";
     public static final String AGENT_NETWORK = "AGENT_NETWORK_GUARD";
+    public static final String AGENT_CALL_INTELLIGENCE = "AGENT_CALL_INTELLIGENCE";
 
     // Fog Computing API Endpoints & Timeouts
     public static final String FOG_NODE_DEFAULT_URL = "https://fog.cybershield.local/api/v1/";
