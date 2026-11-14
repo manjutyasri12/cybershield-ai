@@ -1,0 +1,70 @@
+package com.cybershield.ai.core.ai;
+
+import androidx.annotation.NonNull;
+
+import java.util.ArrayList;
+import java.util.List;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+/**
+ * Feature Vectorizer converts raw domain signals (URLs, text snippets, permission strings,
+ * and network packet headers) into normalized float array Tensors for TFLite inference.
+ */
+@Singleton
+public class FeatureVectorizer {
+
+    private static final int VECTOR_SIZE_URL = 10;
+
+    @Inject
+    public FeatureVectorizer() {
+    }
+
+    @NonNull
+    public float[] vectorizeUrl(@NonNull String url) {
+        float[] features = new float[VECTOR_SIZE_URL];
+        if (url == null || url.isEmpty()) {
+            return features;
+        }
+
+        String lowerUrl = url.toLowerCase();
+
+        // Feature 0: URL Length
+        features[0] = Math.min(url.length() / 200.0f, 1.0f);
+        // Feature 1: Has IP address in hostname
+        features[1] = lowerUrl.matches(".*\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b.*") ? 1.0f : 0.0f;
+        // Feature 2: Has @ symbol (Phishing trick)
+        features[2] = lowerUrl.contains("@") ? 1.0f : 0.0f;
+        // Feature 3: Has double slash redirection
+        features[3] = lowerUrl.indexOf("//", 8) > 0 ? 1.0f : 0.0f;
+        // Feature 4: Subdomain count
+        int dotCount = lowerUrl.split("\\.").length - 1;
+        features[4] = Math.min(dotCount / 5.0f, 1.0f);
+        // Feature 5: HTTPS protocol presence
+        features[5] = lowerUrl.startsWith("https://") ? 1.0f : 0.0f;
+        // Feature 6: Suspicious TLD (.xyz, .top, .zip, .click)
+        features[6] = (lowerUrl.contains(".xyz") || lowerUrl.contains(".top") || lowerUrl.contains(".zip") || lowerUrl.contains(".click")) ? 1.0f : 0.0f;
+        // Feature 7: Presence of login/verify keywords
+        features[7] = (lowerUrl.contains("login") || lowerUrl.contains("verify") || lowerUrl.contains("secure") || lowerUrl.contains("account")) ? 1.0f : 0.0f;
+        // Feature 8: Hyphen count in domain
+        int hyphenCount = lowerUrl.split("-").length - 1;
+        features[8] = Math.min(hyphenCount / 3.0f, 1.0f);
+        // Feature 9: Digit ratio
+        int digitCount = 0;
+        for (char c : lowerUrl.toCharArray()) {
+            if (Character.isDigit(c)) digitCount++;
+        }
+        features[9] = (float) digitCount / Math.max(1, url.length());
+
+        return features;
+    }
+
+    @NonNull
+    public List<Float> toList(@NonNull float[] array) {
+        List<Float> list = new ArrayList<>(array.length);
+        for (float f : array) {
+            list.add(f);
+        }
+        return list;
+    }
+}
