@@ -21,6 +21,7 @@ import com.cybershield.ai.feature.agents.orchestrator.strategy.OrchestrationStra
 import com.cybershield.ai.feature.agents.orchestrator.strategy.PerformanceStrategy;
 import com.cybershield.ai.feature.agents.payment_protection.PaymentProtectionAgent;
 import com.cybershield.ai.feature.agents.phishing.PhishingDetectorAgent;
+import com.cybershield.ai.feature.agents.sms_security.SmsSecurityAgent;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -43,6 +44,7 @@ public class AdaptiveAgentOrchestrator {
     private final NetworkGuardAgent networkAgent;
     private final CallIntelligenceAgent callAgent;
     private final PaymentProtectionAgent paymentAgent;
+    private final SmsSecurityAgent smsAgent;
 
     private final List<OrchestrationObserver> observers = new CopyOnWriteArrayList<>();
     private final MutableLiveData<String> activeStrategyName = new MutableLiveData<>("BALANCED");
@@ -57,7 +59,8 @@ public class AdaptiveAgentOrchestrator {
             MalwareAnomalyAgent malwareAgent,
             NetworkGuardAgent networkAgent,
             CallIntelligenceAgent callAgent,
-            PaymentProtectionAgent paymentAgent
+            PaymentProtectionAgent paymentAgent,
+            SmsSecurityAgent smsAgent
     ) {
         this.resourceMonitor = resourceMonitor;
         this.phishingAgent = phishingAgent;
@@ -65,6 +68,7 @@ public class AdaptiveAgentOrchestrator {
         this.networkAgent = networkAgent;
         this.callAgent = callAgent;
         this.paymentAgent = paymentAgent;
+        this.smsAgent = smsAgent;
         this.currentStrategy = new BalancedStrategy();
     }
 
@@ -91,6 +95,7 @@ public class AdaptiveAgentOrchestrator {
         dispatchAgentAction(networkAgent, metrics);
         dispatchAgentAction(callAgent, metrics);
         dispatchAgentAction(paymentAgent, metrics);
+        dispatchAgentAction(smsAgent, metrics);
     }
 
     private void selectStrategy(SystemMetrics metrics) {
@@ -145,4 +150,5 @@ public class AdaptiveAgentOrchestrator {
     public NetworkGuardAgent getNetworkAgent() { return networkAgent; }
     public CallIntelligenceAgent getCallAgent() { return callAgent; }
     public PaymentProtectionAgent getPaymentAgent() { return paymentAgent; }
+    public SmsSecurityAgent getSmsAgent() { return smsAgent; }
 }

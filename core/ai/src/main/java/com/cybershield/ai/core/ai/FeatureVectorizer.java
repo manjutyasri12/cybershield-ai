@@ -133,4 +133,51 @@ public class FeatureVectorizer {
 
         return features;
     }
+
+    @NonNull
+    public float[] vectorizeSmsText(@NonNull String sender, @NonNull String body) {
+        float[] features = new float[12];
+        if (sender == null) sender = "";
+        if (body == null) body = "";
+        String lowerBody = body.toLowerCase();
+        String lowerSender = sender.toLowerCase();
+
+        // Feature 0: Contains URL link
+        features[0] = (lowerBody.contains("http://") || lowerBody.contains("https://") || lowerBody.contains("bit.ly") || lowerBody.contains("tinyurl")) ? 1.0f : 0.0f;
+
+        // Feature 1: OTP / PIN sharing request keywords
+        features[1] = (lowerBody.contains("otp") || lowerBody.contains("pin") || lowerBody.contains("share code") || lowerBody.contains("verification code")) ? 1.0f : 0.0f;
+
+        // Feature 2: Bank Fraud keywords
+        features[2] = (lowerBody.contains("bank") || lowerBody.contains("account blocked") || lowerBody.contains("debit card") || lowerBody.contains("credit card") || lowerBody.contains("unfreeze")) ? 1.0f : 0.0f;
+
+        // Feature 3: Urgency / Panic words
+        features[3] = (lowerBody.contains("immediately") || lowerBody.contains("urgent") || lowerBody.contains("suspended") || lowerBody.contains("24 hours") || lowerBody.contains("today")) ? 1.0f : 0.0f;
+
+        // Feature 4: Lottery / Prize words
+        features[4] = (lowerBody.contains("lottery") || lowerBody.contains("winner") || lowerBody.contains("won") || lowerBody.contains("prize") || lowerBody.contains("lakh")) ? 1.0f : 0.0f;
+
+        // Feature 5: Courier / Package delivery words
+        features[5] = (lowerBody.contains("courier") || lowerBody.contains("package") || lowerBody.contains("delivery failed") || lowerBody.contains("update address") || lowerBody.contains("shipment")) ? 1.0f : 0.0f;
+
+        // Feature 6: KYC / Aadhaar / PAN words
+        features[6] = (lowerBody.contains("kyc") || lowerBody.contains("pan card") || lowerBody.contains("aadhaar") || lowerBody.contains("sim block")) ? 1.0f : 0.0f;
+
+        // Feature 7: Insurance Scam words
+        features[7] = (lowerBody.contains("insurance") || lowerBody.contains("policy maturity") || lowerBody.contains("premium refund") || lowerBody.contains("claim bonus")) ? 1.0f : 0.0f;
+
+        // Feature 8: Electricity Bill disconnection words
+        features[8] = (lowerBody.contains("electricity") || lowerBody.contains("power disconnection") || lowerBody.contains("bill unpaid") || lowerBody.contains("eb officer")) ? 1.0f : 0.0f;
+
+        // Feature 9: Suspicious Sender ID format
+        features[9] = (lowerSender.length() > 0 && !lowerSender.matches("^[a-z]{2}-[a-z]{6}$")) ? 0.8f : 0.0f;
+
+        // Feature 10: Has APK download link
+        features[10] = (lowerBody.contains(".apk") || lowerBody.contains("download link")) ? 1.0f : 0.0f;
+
+        // Feature 11: Text length ratio
+        features[11] = Math.min(body.length() / 160.0f, 1.0f);
+
+        return features;
+    }
 }
