@@ -1,13 +1,16 @@
 package com.cybershield.ai.feature.agents.di;
 
+import android.content.Context;
+
 import com.cybershield.ai.core.ai.FeatureVectorizer;
 import com.cybershield.ai.core.ai.TFLiteEngine;
 import com.cybershield.ai.core.ai.TensorUtils;
 import com.cybershield.ai.core.common.utils.AppExecutors;
 import com.cybershield.ai.feature.agents.malware.MalwareAnomalyAgent;
 import com.cybershield.ai.feature.agents.network_guard.NetworkGuardAgent;
-import com.cybershield.ai.feature.agents.orchestrator.AgentOrchestrator;
+import com.cybershield.ai.feature.agents.orchestrator.AdaptiveAgentOrchestrator;
 import com.cybershield.ai.feature.agents.orchestrator.BatteryPowerMonitor;
+import com.cybershield.ai.feature.agents.orchestrator.monitor.SystemResourceMonitor;
 import com.cybershield.ai.feature.agents.phishing.PhishingDetectorAgent;
 
 import javax.inject.Singleton;
@@ -15,11 +18,18 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
+import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.components.SingletonComponent;
 
 @Module
 @InstallIn(SingletonComponent.class)
 public final class AgentsModule {
+
+    @Provides
+    @Singleton
+    public static SystemResourceMonitor provideSystemResourceMonitor(@ApplicationContext Context context) {
+        return new SystemResourceMonitor(context);
+    }
 
     @Provides
     @Singleton
@@ -47,7 +57,7 @@ public final class AgentsModule {
 
     @Provides
     @Singleton
-    public static AgentOrchestrator provideAgentOrchestrator(PhishingDetectorAgent phishingAgent, MalwareAnomalyAgent malwareAgent, NetworkGuardAgent networkAgent, BatteryPowerMonitor batteryPowerMonitor) {
-        return new AgentOrchestrator(phishingAgent, malwareAgent, networkAgent, batteryPowerMonitor);
+    public static AdaptiveAgentOrchestrator provideAdaptiveAgentOrchestrator(SystemResourceMonitor resourceMonitor, PhishingDetectorAgent phishingAgent, MalwareAnomalyAgent malwareAgent, NetworkGuardAgent networkAgent) {
+        return new AdaptiveAgentOrchestrator(resourceMonitor, phishingAgent, malwareAgent, networkAgent);
     }
 }
