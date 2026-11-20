@@ -37,8 +37,8 @@ dependencies {
     implementation 'org.tensorflow:tensorflow-lite-support:0.4.4'
 
     // Dagger Hilt
-    implementation 'com.google.dagger:hilt-android:2.50'
-    annotationProcessor 'com.google.dagger:hilt-compiler:2.50'
+    implementation 'com.google.dagger:hilt-android:2.51.1'
+    annotationProcessor 'com.google.dagger:hilt-compiler:2.51.1'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

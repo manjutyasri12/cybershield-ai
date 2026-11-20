@@ -1,5 +1,6 @@
 package com.cybershield.ai.feature.agents.call_intelligence.service;
 
+import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Build;
 import android.telecom.Call;
@@ -26,6 +27,7 @@ public class CyberShieldCallScreeningService extends CallScreeningService {
     @Inject
     CallIntelligenceAgent callIntelligenceAgent;
 
+    @SuppressLint("NewApi")
     @Override
     public void onScreenCall(Call.Details callDetails) {
         if (callDetails == null || callDetails.getHandle() == null) {
@@ -34,6 +36,10 @@ public class CyberShieldCallScreeningService extends CallScreeningService {
 
         Uri handle = callDetails.getHandle();
         String phoneNumber = handle.getSchemeSpecificPart();
+        if (phoneNumber == null || phoneNumber.isEmpty()) {
+            respondToCall(callDetails, new CallResponse.Builder().build());
+            return;
+        }
         boolean isContact = callDetails.getContactDisplayName() != null;
 
         if (callIntelligenceAgent != null) {
@@ -51,6 +57,8 @@ public class CyberShieldCallScreeningService extends CallScreeningService {
 
                 respondToCall(callDetails, responseBuilder.build());
             });
+        } else {
+            respondToCall(callDetails, new CallResponse.Builder().build());
         }
     }
 }

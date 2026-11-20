@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "123456789012",
+    "project_id": "cybershield-ai-prod",
+    "storage_bucket": "cybershield-ai-prod.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123456789012:android:abcdef1234567890",
+        "android_client_info": {
+          "package_name": "com.cybershield.ai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDummyKeyForBuildAndTestCyberShieldAI12345"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_infra_status": 1
+        },
+        "cloud_messaging": {
+          "other_infra_status": 1
+        },
+        "measurement_service": {
+          "client_info": {
+            "mobilesdk_app_id": "1:123456789012:android:abcdef1234567890"
+          }
+        },
+        "crashlytics_service": {
+          "client_info": {
+            "mobilesdk_app_id": "1:123456789012:android:abcdef1234567890"
+          }
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

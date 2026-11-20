@@ -12,7 +12,7 @@ public abstract class BaseAgent {
 
     protected final String agentId;
     protected final AppExecutors appExecutors;
-    private volatile AgentState currentState = AgentState.DORMANT;
+    private volatile AgentState currentState = AgentState.ACTIVE;
 
     public BaseAgent(@NonNull String agentId, @NonNull AppExecutors appExecutors) {
         this.agentId = agentId;

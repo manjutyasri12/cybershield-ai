@@ -14,6 +14,7 @@ import com.cybershield.ai.feature.agents.payment_protection.model.PaymentAction;
 import com.cybershield.ai.feature.agents.payment_protection.model.PaymentProtectionResult;
 
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -124,7 +125,7 @@ public class PaymentProtectionAgent extends BaseAgent {
                 reasonBuilder.append("High amount transaction to a new unverified beneficiary. ");
             }
 
-            String lowerPayload = upiPayloadOrQrUri.toLowerCase();
+            String lowerPayload = upiPayloadOrQrUri.toLowerCase(Locale.ROOT);
             if (lowerPayload.contains("cashback") || lowerPayload.contains("refund") || lowerPayload.contains("claim")) {
                 fraudScore = Math.min(fraudScore + 0.40f, 1.0f);
                 reasonBuilder.append("Phishing keyword pattern (Cashback/Refund scheme) detected in QR payload. ");

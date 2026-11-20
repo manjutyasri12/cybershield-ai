@@ -1,5 +1,6 @@
 package com.cybershield.ai.core.ai.di;
 
+import com.cybershield.ai.core.ai.ExplainableRiskEngine;
 import com.cybershield.ai.core.ai.FeatureVectorizer;
 import com.cybershield.ai.core.ai.TFLiteEngine;
 import com.cybershield.ai.core.ai.TensorUtils;
@@ -31,5 +32,11 @@ public final class AiModule {
     @Singleton
     public static TensorUtils provideTensorUtils() {
         return new TensorUtils();
+    }
+
+    @Provides
+    @Singleton
+    public static ExplainableRiskEngine provideExplainableRiskEngine() {
+        return new ExplainableRiskEngine();
     }
 }

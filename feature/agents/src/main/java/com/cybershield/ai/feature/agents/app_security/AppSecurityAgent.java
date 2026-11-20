@@ -20,6 +20,7 @@ import com.cybershield.ai.feature.agents.base.BaseAgent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -130,7 +131,7 @@ public class AppSecurityAgent extends BaseAgent {
                 }
 
                 // Check Fake Banking App signature pattern
-                String lowerPkg = pkg.packageName.toLowerCase();
+                String lowerPkg = pkg.packageName.toLowerCase(Locale.ROOT);
                 boolean isFakeBankingPattern = (lowerPkg.contains("sbi") || lowerPkg.contains("paytm") || lowerPkg.contains("hdfc") || lowerPkg.contains("icici") || lowerPkg.contains("gpay"))
                         && !lowerPkg.startsWith("com.sbi") && !lowerPkg.startsWith("com.paytm") && !lowerPkg.startsWith("com.hdfc") && !lowerPkg.startsWith("com.icici");
 

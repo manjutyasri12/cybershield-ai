@@ -1,5 +1,6 @@
 package com.cybershield.ai.feature.agents.orchestrator.monitor;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -116,6 +117,7 @@ public class SystemResourceMonitor {
         return false;
     }
 
+    @SuppressLint("MissingPermission")
     private boolean sampleNetworkAvailable() {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (cm != null) {
@@ -131,6 +133,7 @@ public class SystemResourceMonitor {
         return false;
     }
 
+    @SuppressLint("MissingPermission")
     private boolean sampleWifiConnected() {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (cm != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

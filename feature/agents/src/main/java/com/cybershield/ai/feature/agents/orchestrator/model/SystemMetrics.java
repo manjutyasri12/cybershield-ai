@@ -1,5 +1,7 @@
 package com.cybershield.ai.feature.agents.orchestrator.model;
 
+import java.util.Locale;
+
 public class SystemMetrics {
 
     private final float cpuUsagePercent;
@@ -43,8 +45,8 @@ public class SystemMetrics {
     @Override
     public String toString() {
         return "SystemMetrics{" +
-                "CPU=" + String.format("%.1f", cpuUsagePercent) + "%" +
-                ", RAM=" + String.format("%.1f", ramUsagePercent) + "%" +
+                "CPU=" + String.format(Locale.ROOT, "%.1f", cpuUsagePercent) + "%" +
+                ", RAM=" + String.format(Locale.ROOT, "%.1f", ramUsagePercent) + "%" +
                 ", Battery=" + batteryLevelPercent + "%" +
                 ", Charging=" + isCharging +
                 ", Network=" + isNetworkAvailable +

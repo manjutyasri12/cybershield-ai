@@ -100,8 +100,8 @@ public class SecurityRepositoryImpl extends BaseRepository implements SecurityRe
 
             // Run audits across agents
             agentOrchestrator.getPhishingAgent().analyzeUrl("http://suspicious-verify-bank.top/login", result -> recordAgentResult(result));
-            agentOrchestrator.getMalwareAnomalyAgent().analyzePackagePermissions("com.unknown.app", Collections.singletonList("android.permission.SYSTEM_ALERT_WINDOW"), result -> recordAgentResult(result));
-            agentOrchestrator.getNetworkGuardAgent().inspectNetworkConnection("Free-Wifi-Guest", false, true, result -> recordAgentResult(result));
+            agentOrchestrator.getMalwareAgent().analyzePackagePermissions("com.unknown.app", Collections.singletonList("android.permission.SYSTEM_ALERT_WINDOW"), result -> recordAgentResult(result));
+            agentOrchestrator.getNetworkAgent().inspectNetworkConnection("Free-Wifi-Guest", false, true, result -> recordAgentResult(result));
 
             long duration = System.currentTimeMillis() - startTime;
             int activeThreats = threatEventDao.getActiveThreatCountSync();

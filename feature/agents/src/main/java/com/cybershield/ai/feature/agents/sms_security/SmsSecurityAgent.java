@@ -13,6 +13,8 @@ import com.cybershield.ai.feature.agents.base.BaseAgent;
 import com.cybershield.ai.feature.agents.sms_security.model.SmsCategory;
 import com.cybershield.ai.feature.agents.sms_security.model.SmsSecurityResult;
 
+import java.util.Locale;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -82,7 +84,7 @@ public class SmsSecurityAgent extends BaseAgent {
             float threatScore = fraudProb;
             float confidenceScore = Math.max(safeProb, fraudProb);
 
-            String lowerBody = messageBody.toLowerCase();
+            String lowerBody = messageBody.toLowerCase(Locale.ROOT);
             SmsCategory category = SmsCategory.CLEAN;
             StringBuilder reasonBuilder = new StringBuilder();
 
